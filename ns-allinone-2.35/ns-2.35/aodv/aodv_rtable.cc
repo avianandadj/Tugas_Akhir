@@ -258,13 +258,22 @@ aodv_rtable::rt_add(nsaddr_t id)
 void
 aodv_rtable::rt_display(nsaddr_t id)
 {
+    //print fungsi
+    double now = Scheduler::instance().clock(); // get the time
+    FILE *fp;
+    fp = fopen("fungsidipanggil.txt", "a");
+    fprintf(fp, "\n %f fungsi aodv_rtable::rt_display", now);
+
+
     FILE *dumpFile;
     dumpFile = fopen("rtable.txt", "a+");
     aodv_rt_entry *rt = rthead.lh_first;
     for(; rt; rt = rt->rt_link.le_next) {
+        fprintf(fp, "loop\n");
 // You can add more route table entries if you want to. See aodv_rtable.h for more entries.
         fprintf(dumpFile, "NODE: %d \t %f \t %d \t %d \t %d \t %d \t %.4f \t %d \n", id, CURRENT_TIME,
                 rt->rt_dst, rt->rt_nexthop, rt->rt_hops, rt->rt_seqno, rt->rt_expire, rt->rt_flags);
     }
     fclose(dumpFile);
+    fclose(fp);
 }

@@ -690,7 +690,7 @@ AODV::recv(Packet *p, Handler*) {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::recv", now);
+    fprintf(fp, "\n %f fungsi AODV::recv %d", now);
     fclose(fp);
 
     struct hdr_cmn *ch = HDR_CMN(p);
@@ -1468,7 +1468,7 @@ AODV::sendHello() {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::sendHello", now);
+    fprintf(fp, "\n %f fungsi AODV::sendHello %d", now);
     fclose(fp);
 
     Packet *p = Packet::alloc();
@@ -1518,27 +1518,32 @@ AODV::recvHello(Packet *p) {
     struct hdr_aodv_reply *rp = HDR_AODV_REPLY(p);
     AODV_Neighbor *nb;
     //modified AODV calculate neighbor
-    // Node* sender_node = Node::get_node_by_address(rp->rp_dst); 
-    // Node* receiver_node = Node::get_node_by_address(index); 
+     Node* sender_node = Node::get_node_by_address(rp->rp_dst);
+     Node* receiver_node = Node::get_node_by_address(index);
 
     nb = nb_lookup(rp->rp_dst);
     if(nb == 0) {
         nb_insert(rp->rp_dst);
         //modified AODV calculate neighbor
-        // sender_node->addNeighbor(receiver_node); 
-        // receiver_node->addNeighbor(sender_node); 
+         sender_node->addNeighbor(receiver_node);
+         receiver_node->addNeighbor(sender_node);
         //modified AODV calculate neighbor
-        // Node* m_node = Node::get_node_by_address(this->addr()); 
-        //     neighbor_list_node* my_mobile_neighbor_list; 
-        //     my_mobile_neighbor_list = m_node->neighbor_list_; 
-        //     while(my_mobile_neighbor_list) 
-        //     { 
-        //         cout<<"## Mubashir Neighbor ID:"<<my_mobile_neighbor_list->nodeid<<endl; 
-        //         my_mobile_neighbor_list=my_mobile_neighbor_list->next; 
-        //     } 
+         Node* m_node = Node::get_node_by_address(this->addr());
+             neighbor_list_node* my_mobile_neighbor_list;
+             my_mobile_neighbor_list = m_node->neighbor_list_;
+             while(my_mobile_neighbor_list)
+             {
+                 cout<<"## Mubashir Neighbor ID:"<<my_mobile_neighbor_list->nodeid<<endl;
+                 if(my_mobile_neighbor_list->next){
+                     my_mobile_neighbor_list=my_mobile_neighbor_list->next;
+                 }
+                 else{
+                     break;
+                 }
+             }
             
-        //     cout<<"node id :  Mubashir Neighbor list contains ID :" 
-        //     <<my_mobile_neighbor_list-> nodeid<<endl; 
+             cout<<"node id : " <<put here node id<<  "Mubashir Neighbor list contains ID :"
+             <<my_mobile_neighbor_list-> nodeid<<endl;
 
 
     }
