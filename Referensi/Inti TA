@@ -1,0 +1,4 @@
+- Tentukan threshold sebagai nilai acuan pengiriman paket
+- Gunakan Hello messages untuk mengetahui jumlah tetangga node sumber
+- apabila jumlah tetangga < nilai threshold, maka paket tidak dikirim
+- node selanjutnya akan mengulangi hal seperti poin 1

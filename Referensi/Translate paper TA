@@ -1,0 +1,95 @@
+1. INTRODUCTION	
+	MANET terbentuk dari sebuah kumpulan node-node yang terhubung melalui penghubung wireless tanpa adanya persiapan infrastruktur jaringan sebelumnya. Node - node tersebut bergerak secara acak pada jaringan, hal ini menyebabkan perubahan yang cepat dan topologi menjadi tidak dapat diprediksi. Pergerakan node pada manet ini membuat routing pada jaringan menjadi sebuah masalah yang menantang. Manet dapat di terapkan pada berbagai macam bidang, seperti komputasi kolaboratif dan terdistribusi, operasi darurat, manajemen bencana, dan lain lain
+	Manet terdiri dari banyak node - node mobile yang beroperasi dengan power baterai yang terbatas. Sehingga, efisensi energi merupakan sebuah kriteria yang penting sebagai pertimbangan dalam perancangan routing protocol di MANET.
+	Terdapat banyak solusi yang sudah ada untuk routing protokol AODV yang efisien. Beberapa dari proposal yang ada berhubungan dengan efisiensi energi pada perancangan protokol AODV. Shahin Tajik mengajukan WAODV dimana path yang stabil diseleksi dengan mengirimkan Hello packets. Chonggun Kin menawarkan R-AODV yang berhubungan dengan masalah mobilitas node dengan mengirimkan banyak RREPs. K.R. Shobha mengajukan E-AODV dimana blind flooding dari pesan RREQ diabaikan.
+	
+	A. OBJECTIVE
+	Objektif pada paper ini adalah mengajukan solusi baru untuk menentukan routing yang efisien. Kami telah mempresentasikan dua solusi dari efisiensi routing protokol AODV.
+
+	B. CONTRIBUTIONS
+	Kontribusi dari pekerjaan ini terdiri dari:
+		1. Mengusulkan protokol AODV yang baru berbasis energi
+		2. Mengusulkan hello message pada protokol AODV yang baru untuk mendapatkan stabilitas 	rute yang lebih baik
+
+II. BACKGROUND
+	A. Tipe - tipe protokol routing
+	Berdasarkan route discovery, protokol-protokol routing pada dasarnya dibagi menjadi tiga kategori.
+	- Reactive (On Demand) Routing Protocols
+	- Proactive (Table Driven) Routing Protocols
+	- Hybrid Routing Protocols
+
+Reactive atau On demand routing protocol ini sesuai dengan namanya on demand, yang berarti hanya bekerja sesuai permintaan. Protokol ini hanya menyimpan rute yang aktif saja. Sehingga, memory yang dibutuhkan juga berkurang. 
+
+III. AODV Routing Protocol
+	Ad-hoc On-demand Distance Vector Routing Protocol, disingkat AODV adalah routing protocol yang sering digunakan. Merupakan pengembangan dari protokol routing DSDV. Path komunikasi ditentukan ketika dibutuhkan saja. Pada AODV, node memelihara rute ketika mereka digunakan oleh node sumber. Protokol ini menggunakan sequence number untuk menjaga informasi routing tetap yang paling terbaru dan untuk mencegah pembentukan loop pada routing. Ada tiga jenis paket di protokol AODV:
+1. RREQ: Untuk mengirim sebuah paket dari sumber ke tujuan, Node awal memulai proses pencarian path dan mengirimkan paket RREQ yang berisi alamat tujuan ke node tetangganya untuk mencari jalan menuju node tujuan yang sesuai. Ketika sebuah node menerima RREQ, sebuah jalur kembali dari node tujuan ke node sumber terbentuk pada routing table. Setiap sebuah paket RREQ dengan alamat  sumber yang dikenal dan memiliki broadcast id diterima oleh sebuah node, maka paket RREQ yang redundan tersebut di drop oleh node penerima. 
+2. RREP: Ketika paket RREQ sampai ke node tujuan atau node perantara yang mengetahui rute ke node tujuan, sebuah paket balasan (RREP) akan dikirimkan ke node sumber melalui node yang digunakan untuk meneruskan paket RREP.
+3. RERR: Banyak kerusakan link yang terjadi diakibatkan oleh adanya pergerakan node2 secara dinamis pada jaringan ad-hoc. Kerusakan ini menyebabkan adanya drop paket dan sebuah pesan yang bernama RERR terbentuk. Pesan ini dikirimkan ke node tetangga atau perbaikan secara lokal akan dilakukan.
+
+Kerja protokol AODV yang digambarkan di fig.3
+N1 ingin mengirim data ke N4, sehingga N1 membutuhkan sebuah jalur untuk berkomunikasi dengan N2. Untuk mengetahui jalurnya, N1 akan mengirimkan RREQ ke tetangganya N2 dan N5. N2 dan N5 akan membangun sebuah jalur kembali dengan cara membuat tujuan mereka masing2 yaitu N1, Next hop N1, Hop Count 1. N2 tidak mengetahui jalur ke N4. Sehingga, N2 akan mengirimkan paket RREQ ke N3 yang mengetahui jalur ke tujuan, yaitu N4.
+
+N5 mengirimkan paket RREP ke N3, kemudian N3 akan meneruskan RREP ke N2 dan N1. 
+
+IV. PROPOSED MODIFICATION
+
+A. Menggunakan Hello Packet
+Ada kemungkinan node - node pada manet merubah posisinya dari waktu ke waktu. Hello packets digunakan untuk menentukan informasi konektivitas node tetangga. Secara default, informasi konektivitas ini didapatkan di AODV oleh mekanisme Link Layer Detection. Kegagalan penerimaan hello message dapat diartikan node tidak berada pada jangkauan komunikasi. Berdasarkan pengajuan skema pada proposal ini, semua node akan mendengarkan beberapa interval waktu yang telah ditentukan (c) untuk menghitung jumlah Hello packets. Ukuran tiap interval akan disebut dengan d seconds. Mendapatkan lebih banyak hello packet dari node ith untuk node (i+1)th dapat diartikan node ith akan bertahan lebih lama pada jangkauan transmisi node (i+1)th. Sehingga, node tersebut stabil untuk dilakukannya komunikasi. Setelah c intervals, node (i+1)th akan membagi jumlah total hello packet yang diterima oleh c. Nilai ini kemudian akan menjadi node pada range factor dan akan menjadi angka antara 0 dan d. Node-node pada MANET sangat tidak stabil. Sehingga, node pada range factor ini akan menentukan, node mana yang akan dikirimkan RREQ, sehingga mengurangi pengiriman paket RREQ yang tidak perlu. Karena beberapa paket RREQ di-drop, maka kemacetan jaringan akan lebih renda.
+
+Berikut algoritmanya:
+1.Calculate node in range factor.
+2.Generate a random number between 0 and d.
+3.If (random_value > node in range factor)
+4.then broadcast/forward RREQ_packet,
+5.else drop RREQ_packet.
+
+B. Menggunakan Parameter berbasis Energi
+Node- node pada MANET sangat bergantung dengan baterai. Sehingga, merancang sebuah routing protocol berdasarkan kriteria energi dapat menjadi sebuah solusi yang optimal untuk MANET. Selama proses route discovery berlangsung, setiap node menentukan untuk meneruskan RREQ atau drop RREQ tersebut. Semua node memuat energi tertentu. Sebuah field baru akan ditambahkan pada RREQ untuk menghitung transmisi energi. Isi dari RREQ pada AODV yang akan dimodifikasi adalah seperti ini
+
+<source_address, dest_sequence_id, source_sequence_id,
+broadcast_id, dest_address, hop_count, transmission_energy>
+
+Setelah setiap transmisi, node-node akan kehilangan beberapa energi. Sebuah nilai transmisi yang hilang akan dikurangi setelah tiap transmisi. Sebelum meneruskan sebuah paket, setiap node akan menghitung drop factor. Faktor ini dihitung dengan cara membagi sisa energi dan total energi. Drop faktor ini ada di range 0 sampai 1. Setiap node akan menghasilkan angka random. Jika angka random lebih besar daripada hasil perhitungan drop factor, maka RREQ akan dikirimkan. Jika terjadi sebaliknya, maka paket RREQ akan didrop. Ketika kecepatan node tersebut meningkat, maka angka paket RREQ yang redundan juga meningkat. Sehingga, tujuan dari algoritma kami adalah untuk mengurangi angka paket RREQ yang redundan sebanyak mungkin. Karena apabila beberapa paket RREQ di-drop, maka kemacetan pada jaringan juga akan rendah dan throughput akan meningkat pada protokol ini. Berikut algoritma yang sudah di modifikasi
+
+1.Calculate drop factor d for every transmitting node.
+2.Generate a random number between 0 and 1.
+3.If (random_value > drop factor)
+4.then broadcast/forward RREQ_packet,
+5.else drop RREQ_packet.
+
+V. Simulation
+Pada section ini, kami akan menjelaskan topologi, parameter yang digunakan pada simulasi ini, dan performance metrics yang diukur untuk skema yang diajukan dan protokol AODV tradisional.
+
+A. Simulation Topology
+Topologi terdiri dari 10 node
+
+B. Simulation Parameters
+Untuk pengukuran dari kinerja protokol AODV yang dimodifikasi ini, kami menggunakan NS-235 untuk mensimulasikan ide ini. Kami membuat skenario dengan ukuran 900m x 400m. Setiap node memiliki sebuah antena omnidirectional dan model propagasi yang digunakan adalah TwoRayGround. Kecepatan rata2 node adalah 20m/s. Kami menggunakan trafik CBR (Constant Bit Rate) pada setiap node dan protokol UDP pada layer transport. Waktu simulasi adalah 200s. BErikut table simulasi
+
+C. Performance Metrics
+Solusi berbasis energe ini dievaluasi. node sumber-tujuan dipilih secara acak oleh jaringan. Tiap node dimulai dari posisi yang acak dan memilih sebuah tujuan. Hasil simulasi diperoleh dengan merata2kan beberapa percobaan. Beberapa performance metrics telah ditentukan untuk mengevaluasi algoritma ini.
+- Packet Delivery Fraction (PDF): Tingkat paket data yang dikirimkan ke tujuan dihasilkan oleh CBR.
+- Throughput: Rasio jumlah paket yang berhasil diterima oleh node dan jumlah paket yang dikirim oleh node dalam sebuah jaringan komunikasi
+- Delay: Meliputi kemungkinan delay yang terdiri dari retransmission delay, route discovery latency, dll
+
+VI. HASIL
+Kami telah membandingkan AODV tradisional dengan AODV yang telah dimodifikasi. Kami mengukur dari PDF, Throughput dan delay. Kami memvariasikan jumlah node dan tingkat mobilitas sambil membandingkan kedua protokol tersebut.
+
+A. Varying Mobility
+Dapat diamati bahwa delay berkurang pada protokol AODV yang dimodifikasi. Ketika mobilitas yang lebih tinggi ditambahkan, protokol menunjukan kinerja yang lebih baik. Saat kecepatan node bertambah, paket RREQ akan semakin sering terbuat, yang menyebabkan kemacetan jaringan, tetapi, protokol baru akan menjatuhkan paket RREQ yang redundan. PDF menurun dan jumlah paket yang berhasil mencapai tujuan juga menurun (terjadi apabila tingkat mobilitas bertambah).
+Fig. 7 dan 8 membandingkan AODV tradisional dengan yang dimodifikasi dalam hal throughput dan delay. Protokol AODV yang dimodifikasi menunjukan kinerja yang lebih baik.
+
+B. Varying NUmber of Nodes
+Terlihat sangat jelas, saat jumlah node bertambah, delay juga meningkat. Skema AODV yang diajukan memiliki PDR yang lebih tinggi dibandingkan AODV tradisional. Kita dapat lihat dari Fig 10 bahwa semakin besar ukuran jaringan, maka throughput menurun
+
+Kita dapat melihat dari solusi yang ditawarkan memberikan throughput yang lebih baik dibanding AODV biasa karena protokol ini mengurangi kemacetan yang terjadi pada jaringan dan memastikan pengiriman pesan berhasil dengan cara menjatuhkan paket RREQ yang redundan.
+
+VII CONCLUSION
+Pada paper ini, beberapa skema baru untuk routing AODV yang efektif diajukan. Tetapi solusi ini masih terkena dampak dari peningkatan masalah jaringan seumur hidup. Kami melakukan simulasi ini menggunakan NS-2.35. Berdasarkan simulasi, algoritma yang kami modifikasi menunjukan kinerja yang lebih baik daripada AODV tradisional dalam hal throughput, rata-rata end-to-end delay, dan paket delivery fraction
+
+
+
+
+
+
+
