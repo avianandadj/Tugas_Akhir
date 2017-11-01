@@ -690,7 +690,7 @@ AODV::recv(Packet *p, Handler*) {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::recv %d", now);
+    fprintf(fp, "\n %f fungsi AODV::recv", now);
     fclose(fp);
 
     struct hdr_cmn *ch = HDR_CMN(p);
@@ -1468,7 +1468,7 @@ AODV::sendHello() {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::sendHello %d", now);
+    fprintf(fp, "\n %f fungsi AODV::sendHello ini ceritanya node: %d", now, index);
     fclose(fp);
 
     Packet *p = Packet::alloc();
@@ -1511,7 +1511,7 @@ AODV::recvHello(Packet *p) {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::recvHello", now);
+    fprintf(fp, "\n %f fungsi AODV::recvHello ini ceritanya node: %d", now, index);
     fclose(fp);
 
 //struct hdr_ip *ih = HDR_IP(p);
@@ -1531,20 +1531,24 @@ AODV::recvHello(Packet *p) {
          Node* m_node = Node::get_node_by_address(this->addr());
              neighbor_list_node* my_mobile_neighbor_list;
              my_mobile_neighbor_list = m_node->neighbor_list_;
+            //  int count = 0;
+
              while(my_mobile_neighbor_list)
              {
-                 cout<<"## Mubashir Neighbor ID:"<<my_mobile_neighbor_list->nodeid<<endl;
+                 cout<<"## Neighbor ID:"<<my_mobile_neighbor_list->nodeid<<endl;
+                //  count++;
                  if(my_mobile_neighbor_list->next){
                      my_mobile_neighbor_list=my_mobile_neighbor_list->next;
+                    
                  }
                  else{
+                    //cout<<"## Jumlah: "<<count<<endl;
                      break;
                  }
              }
-            
-             cout<<"node id : " <<put here node id<<  "Mubashir Neighbor list contains ID :"
-             <<my_mobile_neighbor_list-> nodeid<<endl;
-
+             
+             //cout<<"node id : " <<index <<" ## Neighbor list contains ID:"<<my_mobile_neighbor_list->nodeid<<endl;
+             //cout<<"## Jumlah: "<<m_node->count<<endl;
 
     }
     else {
@@ -1561,7 +1565,7 @@ AODV::nb_insert(nsaddr_t id) {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::nb_insert", now);
+    fprintf(fp, "\n %f fungsi AODV::nb_insert ini ceritanya node: %d ", now, index);
     fclose(fp);
 
     AODV_Neighbor *nb = new AODV_Neighbor(id);
@@ -1596,7 +1600,7 @@ AODV::nb_delete(nsaddr_t id) {
     double now = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::nb_delete", now);
+    fprintf(fp, "\n %f fungsi AODV::nb_delete ini ceritanya node: %d", now, index);
     fclose(fp);
 
     AODV_Neighbor *nb = nbhead.lh_first;
@@ -1628,7 +1632,7 @@ AODV::nb_purge() {
     double nows = Scheduler::instance().clock(); // get the time
     FILE *fp;
     fp = fopen("fungsidipanggil.txt", "a");
-    fprintf(fp, "\n %f fungsi AODV::nb_purge", nows);
+    fprintf(fp, "\n %f fungsi AODV::nb_purge ini ceritanya node: %d", nows, index);
     fclose(fp);
 
     AODV_Neighbor *nb = nbhead.lh_first;
