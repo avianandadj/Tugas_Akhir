@@ -325,7 +325,7 @@ protected:
     PortClassifier *dmux_;
 
 //    /*Modified AODV, calculate number of neighbor node*/
-//    int             nb_node();
+    int             nb_node();
 
 };
 

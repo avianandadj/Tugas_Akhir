@@ -187,6 +187,8 @@ HelloTimer::handle(Event*) {
     fprintf(fp, "\n %f fungsi HelloTimer::handle", now);
     fclose(fp);
 
+    cout<<"Jumlah node: "<<nb_node()<<endl;
+
     agent->sendHello();
     double interval = MinHelloInterval +
                       ((MaxHelloInterval - MinHelloInterval) * Random::uniform());
@@ -1548,7 +1550,7 @@ AODV::recvHello(Packet *p) {
              }
              
              //cout<<"node id : " <<index <<" ## Neighbor list contains ID:"<<my_mobile_neighbor_list->nodeid<<endl;
-             //cout<<"## Jumlah: "<<m_node->count<<endl;
+             //cout<<"## Jumlah: "<<nb_node()<<endl;
 
     }
     else {
@@ -1648,13 +1650,13 @@ AODV::nb_purge() {
 
 }
 
-// //MODIFIED AODV
-// // calculated number neighbour node
-// int AODV::nb_node(){
-//     int jumlahNode = 0;
-//     AODV_Neighbor *cc = nbhead.lh_first;
-//     for(; cc; cc=cc->nb_link.le_next){
-//         jumlahNode++;
-//     }
-//     return jumlahNode;
-// }
+//MODIFIED AODV
+// calculated number neighbour node
+int AODV::nb_node(){
+    int jumlahNode = 0;
+    AODV_Neighbor *cc = nbhead.lh_first;
+    for(; cc; cc=cc->nb_link.le_next){
+        jumlahNode++;
+    }
+    return jumlahNode;
+}
